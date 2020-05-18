@@ -93,7 +93,8 @@ class Spreadsheet {
   }
 
   reRender() {
-    this.sheet.table.render();
+    this.sheet.resetData(this.sheet.data);
+    // this.sheet.table.render();
     return this;
   }
 

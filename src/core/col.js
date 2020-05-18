@@ -35,6 +35,9 @@ class Cols {
 
   getOrNew(ci) {
     this._[ci] = this._[ci] || {};
+    if (ci >= this.len) {
+      this.len = ci + 1;
+    }
     return this._[ci];
   }
 

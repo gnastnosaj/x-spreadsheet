@@ -1,8 +1,13 @@
 import helper from './helper';
-import { expr2expr } from './alphabet';
+import {
+  expr2expr
+} from './alphabet';
 
 class Rows {
-  constructor({ len, height }) {
+  constructor({
+    len,
+    height
+  }) {
     this._ = {};
     this.len = len;
     // default row height
@@ -65,7 +70,12 @@ class Rows {
   }
 
   getOrNew(ri) {
-    this._[ri] = this._[ri] || { cells: {} };
+    this._[ri] = this._[ri] || {
+      cells: {}
+    };
+    if (ri >= this.len) {
+      this.len = ri + 1;
+    }
     return this._[ri];
   }
 
@@ -112,7 +122,10 @@ class Rows {
   // what: all | format | text
   copyPaste(srcCellRange, dstCellRange, what, autofill = false, cb = () => {}) {
     const {
-      sri, sci, eri, eci,
+      sri,
+      sci,
+      eri,
+      eci,
     } = srcCellRange;
     const dsri = dstCellRange.sri;
     const dsci = dstCellRange.sci;
@@ -140,7 +153,9 @@ class Rows {
                 const ncell = helper.cloneDeep(this._[i].cells[j]);
                 // ncell.text
                 if (autofill && ncell && ncell.text && ncell.text.length > 0) {
-                  const { text } = ncell;
+                  const {
+                    text
+                  } = ncell;
                   let n = (jj - dsci) + (ii - dsri) + 2;
                   if (!isAdd) {
                     n -= dn + 1;
@@ -186,7 +201,9 @@ class Rows {
           nri = dstCellRange.sri + (nri - srcCellRange.sri);
           nci = dstCellRange.sci + (nci - srcCellRange.sci);
         }
-        ncellmm[nri] = ncellmm[nri] || { cells: {} };
+        ncellmm[nri] = ncellmm[nri] || {
+          cells: {}
+        };
         ncellmm[nri].cells[nci] = this._[ri].cells[ci];
       });
     });
@@ -196,7 +213,10 @@ class Rows {
   // src: Array<Array<String>>
   paste(src, dstCellRange) {
     if (src.length <= 0) return;
-    const { sri, sci } = dstCellRange;
+    const {
+      sri,
+      sci
+    } = dstCellRange;
     src.forEach((row, i) => {
       const ri = sri + i;
       row.forEach((cell, j) => {
@@ -297,7 +317,9 @@ class Rows {
     const ri = keys[keys.length - 1];
     const col = this._[ri];
     if (col) {
-      const { cells } = col;
+      const {
+        cells
+      } = col;
       const ks = Object.keys(cells);
       const ci = ks[ks.length - 1];
       return [parseInt(ri, 10), parseInt(ci, 10)];
@@ -328,8 +350,12 @@ class Rows {
   }
 
   getData() {
-    const { len } = this;
-    return Object.assign({ len }, this._);
+    const {
+      len
+    } = this;
+    return Object.assign({
+      len
+    }, this._);
   }
 }
 

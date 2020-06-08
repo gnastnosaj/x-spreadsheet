@@ -175,9 +175,6 @@ export default class Print {
       for (; ri <= cr.eri; ri += 1) {
         const rh = data.rows.getHeight(ri);
         th += rh;
-        console.log(scale)
-        console.log(th * scale)
-        console.log(iheight)
         if (th * scale <= iheight) {
           for (let ci = 0; ci <= cr.eci; ci += 1) {
             renderCell(draw, data, ri, ci, yoffset);
@@ -185,7 +182,6 @@ export default class Print {
           }
         } else {
           yo = -(th - rh);
-          console.log(yo)
           break;
         }
       }

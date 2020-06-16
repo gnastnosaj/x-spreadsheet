@@ -73,10 +73,10 @@ function pagerOrientationChange(evt) {
 export default class Print {
   constructor(data) {
     this.paper = {
-      w: inches2px(PAGER_SIZES[0][1]),
-      h: inches2px(PAGER_SIZES[0][2]),
+      w: inches2px(PAGER_SIZES[1][1]),
+      h: inches2px(PAGER_SIZES[1][2]),
       padding: 50,
-      orientation: PAGER_ORIENTATIONS[0],
+      orientation: PAGER_ORIENTATIONS[1],
       get width() {
         return this.orientation === 'landscape' ? this.h : this.w;
       },
@@ -89,7 +89,7 @@ export default class Print {
       .children(
         h('div', `${cssPrefix}-print-bar`)
         .children(
-          h('div', '-title').child('Print settings'),
+          h('div', '-title').child(`${t('print.settings')}`),
           h('div', '-right').children(
             h('div', `${cssPrefix}-buttons`).children(
               new Button('cancel').on('click', btnClick.bind(this, 'cancel')),
@@ -105,13 +105,23 @@ export default class Print {
               h('fieldset', '').children(
                 h('label', '').child(`${t('print.size')}`),
                 h('select', '').children(
-                  ...PAGER_SIZES.map((it, index) => h('option', '').attr('value', index).child(`${it[0]} ( ${it[1]}''x${it[2]}'' )`)),
+                  ...PAGER_SIZES.map((it, index) => {
+                    const option = h('option', '').attr('value', index);
+                    option.el.selected = (index == 1);
+                    option.child(`${it[0]} ( ${it[1]}''x${it[2]}'' )`);
+                    return option;
+                  }),
                 ).on('change', pagerSizeChange.bind(this)),
               ),
               h('fieldset', '').children(
                 h('label', '').child(`${t('print.orientation')}`),
                 h('select', '').children(
-                  ...PAGER_ORIENTATIONS.map((it, index) => h('option', '').attr('value', index).child(`${t('print.orientations')[index]}`)),
+                  ...PAGER_ORIENTATIONS.map((it, index) => {
+                    const option = h('option', '').attr('value', index).attr('selected', index == 1 ? 'selected' : null);
+                    option.el.selected = (index == 1);
+                    option.child(`${t('print.orientations')[index]}`);
+                    return option;
+                  }),
                 ).on('change', pagerOrientationChange.bind(this)),
               ),
             ),

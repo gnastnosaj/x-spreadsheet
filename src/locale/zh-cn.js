@@ -45,6 +45,7 @@ export default {
     cellnoneditable: '不可编辑',
   },
   print: {
+    settings: '打印设置',
     size: '纸张大小',
     orientation: '方向',
     orientations: ['横向', '纵向'],

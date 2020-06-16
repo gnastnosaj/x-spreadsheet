@@ -45,6 +45,7 @@ export default {
     cellnoneditable: 'Disable editing',
   },
   print: {
+    settings: 'Print Settings',
     size: 'Paper size',
     orientation: 'Page orientation',
     orientations: ['Landscape', 'Portrait'],

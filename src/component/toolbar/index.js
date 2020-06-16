@@ -20,13 +20,20 @@ import Freeze from './freeze';
 import Merge from './merge';
 import Redo from './redo';
 import Undo from './undo';
+import Save from './save';
 import Print from './print';
 import Textwrap from './textwrap';
 import More from './more';
 
-import { h } from '../element';
-import { cssPrefix } from '../../config';
-import { bind } from '../event';
+import {
+  h
+} from '../element';
+import {
+  cssPrefix
+} from '../../config';
+import {
+  bind
+} from '../event';
 
 function buildDivider() {
   return h('div', `${cssPrefix}-toolbar-divider`);
@@ -36,14 +43,22 @@ function initBtns2() {
   this.btns2 = [];
   this.items.forEach((it) => {
     if (Array.isArray(it)) {
-      it.forEach(({ el }) => {
+      it.forEach(({
+        el
+      }) => {
         const rect = el.box();
-        const { marginLeft, marginRight } = el.computedStyle();
+        const {
+          marginLeft,
+          marginRight
+        } = el.computedStyle();
         this.btns2.push([el, rect.width + parseInt(marginLeft, 10) + parseInt(marginRight, 10)]);
       });
     } else {
       const rect = it.box();
-      const { marginLeft, marginRight } = it.computedStyle();
+      const {
+        marginLeft,
+        marginRight
+      } = it.computedStyle();
       this.btns2.push([it, rect.width + parseInt(marginLeft, 10) + parseInt(marginRight, 10)]);
     }
   });
@@ -51,9 +66,15 @@ function initBtns2() {
 
 function moreResize() {
   const {
-    el, btns, moreEl, btns2,
+    el,
+    btns,
+    moreEl,
+    btns2,
   } = this;
-  const { moreBtns, contentEl } = moreEl.dd;
+  const {
+    moreBtns,
+    contentEl
+  } = moreEl.dd;
   el.css('width', `${this.widthFn() - 60}px`);
   const elBox = el.box();
 
@@ -89,6 +110,7 @@ export default class Toolbar {
     const style = data.defaultStyle();
     this.items = [
       [
+        this.saveEl = new Save(),
         this.undoEl = new Undo(),
         this.redoEl = new Redo(),
         new Print(),
@@ -183,16 +205,22 @@ export default class Toolbar {
 
   reset() {
     if (this.isHide) return;
-    const { data } = this;
+    const {
+      data
+    } = this;
     const style = data.getSelectedCellStyle();
     // console.log('canUndo:', data.canUndo());
+    this.saveEl.setState(!data.canSave())
     this.undoEl.setState(!data.canUndo());
     this.redoEl.setState(!data.canRedo());
     this.mergeEl.setState(data.canUnmerge(), !data.selector.multiple());
     this.autofilterEl.setState(!data.canAutofilter());
     // this.mergeEl.disabled();
     // console.log('selectedCell:', style, cell);
-    const { font, format } = style;
+    const {
+      font,
+      format
+    } = style;
     this.formatEl.setState(format);
     this.fontEl.setState(font.name);
     this.fontSizeEl.setState(font.size);

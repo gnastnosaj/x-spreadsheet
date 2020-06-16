@@ -233,8 +233,9 @@ body {
   z-index: 0;
 }
 .x-spreadsheet-selector .hide-input input {
+  padding: 0;
   width: 0;
-  border: none;
+  border: none !important;
 }
 .x-spreadsheet-selector .x-spreadsheet-selector-area {
   position: absolute;
@@ -335,7 +336,7 @@ body {
 }
 .x-spreadsheet-item.state,
 .x-spreadsheet-header.state {
-  padding-left: 35px!important;
+  padding-left: 35px !important;
   position: relative;
 }
 .x-spreadsheet-item.state:before,
@@ -367,7 +368,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  opacity: 0!important;
+  opacity: 0 !important;
   outline: 0;
   z-index: -1;
 }
@@ -847,7 +848,7 @@ form fieldset select {
   display: inline-block;
 }
 .x-spreadsheet-icon .x-spreadsheet-icon-img {
-  background-image: url(58eaeb4e52248a5c75936c6f4c33a370.svg);
+  background-image: url(717e1e5b41265091c27335576eff53ed.svg);
   position: absolute;
   width: 262px;
   height: 444px;
@@ -1031,6 +1032,10 @@ form fieldset select {
 }
 .x-spreadsheet-icon .x-spreadsheet-icon-img.chevron-right {
   left: -54px;
+  top: -54px;
+}
+.x-spreadsheet-icon .x-spreadsheet-icon-img.save {
+  left: -108px;
   top: -54px;
 }
 

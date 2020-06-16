@@ -43,6 +43,9 @@ class Spreadsheet {
     d.change = (...args) => {
       this.sheet.trigger('change', ...args);
     };
+    d.save = (...args) => {
+      this.sheet.trigger('save', ...args);
+    };
     this.datas.push(d);
     // console.log('d:', n, d, this.datas);
     this.bottombar.addItem(n, active);
@@ -110,6 +113,11 @@ class Spreadsheet {
 
   change(cb) {
     this.sheet.on('change', cb);
+    return this;
+  }
+
+  save(cb) {
+    this.sheet.on('save', cb);
     return this;
   }
 

@@ -515,7 +515,9 @@ function insertDeleteRowColumn(type) {
 
 function toolbarChange(type, value) {
   const { data } = this;
-  if (type === 'undo') {
+  if (type === 'save') {
+    this.save();
+  } else if (type === 'undo') {
     this.undo();
   } else if (type === 'redo') {
     this.redo();
@@ -932,6 +934,11 @@ export default class Sheet {
     data.setFreeze(ri, ci);
     sheetReset.call(this);
     return this;
+  }
+
+  save() {
+    this.data.saveData();
+    sheetReset.call(this);
   }
 
   undo() {

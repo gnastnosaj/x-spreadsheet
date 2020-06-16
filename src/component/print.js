@@ -145,6 +145,7 @@ export default class Print {
       padding
     } = paper;
     const cr = data.contentRange();
+    cr.eci = data.cols.len;
     const iwidth = width - padding * 2;
     const scale = iwidth / cr.w;
     const iheight = height - padding * 2 - data.freezeTotalHeight() * scale;

@@ -170,7 +170,7 @@ declare module 'x-data-spreadsheet' {
      * load data
      * @param json
      */
-    loadData(json: Record<string, any>): void;
+    loadData(json: Record<string, any>);
     /**
      * get data
      */
@@ -181,11 +181,16 @@ declare module 'x-data-spreadsheet' {
      */
     change(callback: (json: Record<string, any>) => void);
     /**
+     * bind handler to save event, including data save and user actions
+     * @param callback
+     */
+    save(callback: (json: Record<string, any>) => void);
+    /**
      * set locale
      * @param lang
      * @param message
      */
-    locale(lang: string, message: string);
+    static locale(lang: string, message: string);
   }
   global {
     interface Window {

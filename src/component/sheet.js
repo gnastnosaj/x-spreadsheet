@@ -878,6 +878,7 @@ function sheetInitEvents() {
         case 83:
           this.save();
           evt.preventDefault();
+          break;
         case 90:
           // undo: ctrl + z
           this.undo();

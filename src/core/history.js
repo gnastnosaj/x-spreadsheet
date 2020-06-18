@@ -2,11 +2,11 @@
 
 export default class History {
   constructor() {
-    this.clear();
+    this.undoItems = [];
+    this.redoItems = [];
   }
 
   add(data) {
-    this.clean = false;
     this.undoItems.push(JSON.stringify(data));
     this.redoItems = [];
   }
@@ -20,7 +20,6 @@ export default class History {
   }
 
   undo(currentd, cb) {
-    this.clean = false;
     const {
       undoItems,
       redoItems
@@ -32,7 +31,6 @@ export default class History {
   }
 
   redo(currentd, cb) {
-    this.clean = false;
     const {
       undoItems,
       redoItems
@@ -41,11 +39,5 @@ export default class History {
       undoItems.push(JSON.stringify(currentd));
       cb(JSON.parse(redoItems.pop()));
     }
-  }
-
-  clear() {
-    this.clean = true;
-    this.undoItems = [];
-    this.redoItems = [];
   }
 }

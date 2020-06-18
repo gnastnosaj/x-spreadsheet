@@ -418,7 +418,7 @@ export default class DataProxy {
     this.clipboard = new Clipboard();
     this.autoFilter = new AutoFilter();
     this.change = () => {};
-    this.save = () => {};
+    this.clean = true;
     this.exceptRowSet = new Set();
     this.sortedRowMap = new Map();
     this.unsortedRowMap = new Map();
@@ -467,7 +467,7 @@ export default class DataProxy {
   }
 
   canSave() {
-    return !this.history.clean;
+    return !this.clean;
   }
 
   canUndo() {
@@ -479,8 +479,7 @@ export default class DataProxy {
   }
 
   saveData() {
-    this.history.clean = true;
-    this.save(this.getData());
+    this.clean = true;
   }
 
   undo() {

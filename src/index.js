@@ -1,10 +1,16 @@
 /* global window, document */
-import { h } from './component/element';
+import {
+  h
+} from './component/element';
 import DataProxy from './core/data_proxy';
 import Sheet from './component/sheet';
 import Bottombar from './component/bottombar';
-import { cssPrefix } from './config';
-import { locale } from './locale/locale';
+import {
+  cssPrefix
+} from './config';
+import {
+  locale
+} from './locale/locale';
 import './index.less';
 
 
@@ -41,10 +47,8 @@ class Spreadsheet {
     const n = name || `sheet${this.sheetIndex}`;
     const d = new DataProxy(n, this.options);
     d.change = (...args) => {
+      d.clean = false;
       this.sheet.trigger('change', ...args);
-    };
-    d.save = (...args) => {
-      this.sheet.trigger('save', ...args);
     };
     this.datas.push(d);
     // console.log('d:', n, d, this.datas);
@@ -107,7 +111,9 @@ class Spreadsheet {
   }
 
   validate() {
-    const { validations } = this.data;
+    const {
+      validations
+    } = this.data;
     return validations.errors.size <= 0;
   }
 
@@ -116,8 +122,8 @@ class Spreadsheet {
     return this;
   }
 
-  save(cb) {
-    this.sheet.on('save', cb);
+  beforeSave(beforeSave) {
+    this.sheet.beforeSave = beforeSave;
     return this;
   }
 

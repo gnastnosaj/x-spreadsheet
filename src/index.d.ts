@@ -120,13 +120,13 @@ declare module 'x-data-spreadsheet' {
       left?: string[];
     };
   }
-  export interface Editor {}
-  export interface Element {}
+  export interface Editor { }
+  export interface Element { }
 
-  export interface Row {}
-  export interface Table {}
-  export interface Cell {}
-  export interface Sheet {}
+  export interface Row { }
+  export interface Table { }
+  export interface Cell { }
+  export interface Sheet { }
 
   export default class Spreadsheet {
     constructor(container: string | HTMLElement, opts?: Options);
@@ -181,10 +181,10 @@ declare module 'x-data-spreadsheet' {
      */
     change(callback: (json: Record<string, any>) => void);
     /**
-     * bind handler to save event, including data save and user actions
+     * before save
      * @param callback
      */
-    save(callback: (json: Record<string, any>) => void);
+    beforeSave(beforeSave: () => any);
     /**
      * set locale
      * @param lang
@@ -194,7 +194,7 @@ declare module 'x-data-spreadsheet' {
   }
   global {
     interface Window {
-      x_spreadsheet(container: string | HTMLElement, opts?: Options): Spreadsheet; 
+      x_spreadsheet(container: string | HTMLElement, opts?: Options): Spreadsheet;
     }
   }
 }

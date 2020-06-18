@@ -627,7 +627,8 @@ function colResizerFinished(cRect, distance) {
 function dataSetCellText(text, state = 'finished') {
   const {
     data,
-    table
+    table,
+    toolbar
   } = this;
   // const [ri, ci] = selector.indexes;
   if (data.settings.mode === 'read') return;
@@ -639,6 +640,8 @@ function dataSetCellText(text, state = 'finished') {
     } = data.selector;
     this.trigger('cell-edited', text, ri, ci);
     table.render();
+  } else {
+    toolbar.reset();
   }
 }
 
@@ -1120,11 +1123,26 @@ export default class Sheet {
   }
 
   save() {
-    this.data.saveData();
-    sheetReset.call(this);
+    if (this.beforeSave) {
+      const result = this.beforeSave();
+      if (result == null || result === true) {
+        this.editor.clear();
+        this.data.saveData();
+        sheetReset.call(this);
+      } else if (typeof result === 'object') {
+        result.subscribe(r => {
+          if (r === false) {
+            this.editor.clear();
+            this.data.saveData();
+            sheetReset.call(this);
+          }
+        });
+      }
+    }
   }
 
   undo() {
+    this.editor.clear();
     this.data.undo();
     sheetReset.call(this);
   }

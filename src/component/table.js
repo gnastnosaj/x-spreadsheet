@@ -111,6 +111,9 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
       strike: style.strike,
       underline: style.underline,
     }, style.textwrap);
+    if (cell.extendOrientation && cell.extendOrientation !== 'unset') {
+      draw.arrow(dbox, cell.extendOrientation);
+    }
     // error
     const error = data.validations.getError(rindex, cindex);
     if (error) {

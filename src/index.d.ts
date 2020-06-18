@@ -137,7 +137,7 @@ declare module 'x-data-spreadsheet' {
      * @param colIndex {number} column index
      * @param sheetIndex {number} sheet iindex
      */
-    cell(rowIndex: number, colIndex: number, sheetIndex: number): Cell;
+    cell(rowIndex: number, colIndex: number, sheetIndex?: number): Cell;
     /**
      * retrieve cell style
      * @param rowIndex
@@ -147,7 +147,7 @@ declare module 'x-data-spreadsheet' {
     cellStyle(
       rowIndex: number,
       colIndex: number,
-      sheetIndex: number
+      sheetIndex?: number
     ): CellStyle;
     /**
      * get/set cell text
@@ -161,6 +161,11 @@ declare module 'x-data-spreadsheet' {
       sheetIndex?: number,
       text?: string
     ): string;
+
+    setSelectedCellAttr(property: any, value: any, sheetIndex?: number);
+
+    reRender();
+
     /**
      * remove current sheet
      */

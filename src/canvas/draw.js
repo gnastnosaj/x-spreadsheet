@@ -32,7 +32,10 @@ class DrawBox {
   }
 
   setBorders({
-    top, bottom, left, right,
+    top,
+    bottom,
+    left,
+    right,
   }) {
     if (top) this.borderTop = top;
     if (right) this.borderRight = right;
@@ -49,8 +52,13 @@ class DrawBox {
   }
 
   textx(align) {
-    const { width, padding } = this;
-    let { x } = this;
+    const {
+      width,
+      padding
+    } = this;
+    let {
+      x
+    } = this;
     if (align === 'left') {
       x += padding;
     } else if (align === 'center') {
@@ -62,8 +70,13 @@ class DrawBox {
   }
 
   texty(align, h) {
-    const { height, padding } = this;
-    let { y } = this;
+    const {
+      height,
+      padding
+    } = this;
+    let {
+      y
+    } = this;
     if (align === 'top') {
       y += padding;
     } else if (align === 'middle') {
@@ -75,34 +88,61 @@ class DrawBox {
   }
 
   topxys() {
-    const { x, y, width } = this;
-    return [[x, y], [x + width, y]];
+    const {
+      x,
+      y,
+      width
+    } = this;
+    return [
+      [x, y],
+      [x + width, y]
+    ];
   }
 
   rightxys() {
     const {
-      x, y, width, height,
+      x,
+      y,
+      width,
+      height,
     } = this;
-    return [[x + width, y], [x + width, y + height]];
+    return [
+      [x + width, y],
+      [x + width, y + height]
+    ];
   }
 
   bottomxys() {
     const {
-      x, y, width, height,
+      x,
+      y,
+      width,
+      height,
     } = this;
-    return [[x, y + height], [x + width, y + height]];
+    return [
+      [x, y + height],
+      [x + width, y + height]
+    ];
   }
 
   leftxys() {
     const {
-      x, y, height,
+      x,
+      y,
+      height,
     } = this;
-    return [[x, y], [x, y + height]];
+    return [
+      [x, y],
+      [x, y + height]
+    ];
   }
 }
 
 function drawFontLine(type, tx, ty, align, valign, blheight, blwidth) {
-  const floffset = { x: 0, y: 0 };
+  const floffset = {
+    x: 0,
+    y: 0
+  };
   if (type === 'underline') {
     if (valign === 'bottom') {
       floffset.y = 0;
@@ -147,7 +187,10 @@ class Draw {
   }
 
   clear() {
-    const { width, height } = this.el;
+    const {
+      width,
+      height
+    } = this.el;
     this.ctx.clearRect(0, 0, width, height);
     return this;
   }
@@ -216,9 +259,16 @@ class Draw {
     textWrap: text wrapping
   */
   text(mtxt, box, attr = {}, textWrap = true) {
-    const { ctx } = this;
     const {
-      align, valign, font, color, strike, underline,
+      ctx
+    } = this;
+    const {
+      align,
+      valign,
+      font,
+      color,
+      strike,
+      underline,
     } = attr;
     const tx = box.textx(align);
     ctx.save();
@@ -236,11 +286,19 @@ class Draw {
     txts.forEach((it) => {
       const txtWidth = ctx.measureText(it).width;
       if (textWrap && txtWidth > npx(biw)) {
-        let textLine = { w: 0, len: 0, start: 0 };
+        let textLine = {
+          w: 0,
+          len: 0,
+          start: 0
+        };
         for (let i = 0; i < it.length; i += 1) {
           if (textLine.w >= npx(biw)) {
             ntxts.push(it.substr(textLine.start, textLine.len));
-            textLine = { w: 0, len: 0, start: i };
+            textLine = {
+              w: 0,
+              len: 0,
+              start: i
+            };
           }
           textLine.len += 1;
           textLine.w += ctx.measureText(it[i]).width + 1;
@@ -270,7 +328,9 @@ class Draw {
   }
 
   border(style, color) {
-    const { ctx } = this;
+    const {
+      ctx
+    } = this;
     ctx.lineWidth = thinLineWidth;
     ctx.strokeStyle = color;
     // console.log('style:', style);
@@ -289,7 +349,9 @@ class Draw {
   }
 
   line(...xys) {
-    const { ctx } = this;
+    const {
+      ctx
+    } = this;
     if (xys.length > 1) {
       const [x, y] = xys[0];
       ctx.moveTo(npxLine(x), npxLine(y));
@@ -303,12 +365,17 @@ class Draw {
   }
 
   strokeBorders(box) {
-    const { ctx } = this;
+    const {
+      ctx
+    } = this;
     ctx.save();
     ctx.beginPath();
     // border
     const {
-      borderTop, borderRight, borderBottom, borderLeft,
+      borderTop,
+      borderRight,
+      borderBottom,
+      borderLeft,
     } = box;
     if (borderTop) {
       this.border(...borderTop);
@@ -331,9 +398,14 @@ class Draw {
   }
 
   dropdown(box) {
-    const { ctx } = this;
     const {
-      x, y, width, height,
+      ctx
+    } = this;
+    const {
+      x,
+      y,
+      width,
+      height,
     } = box;
     const sx = x + width - 15;
     const sy = y + height - 15;
@@ -348,9 +420,50 @@ class Draw {
     ctx.restore();
   }
 
+  arrow(box, orientation) {
+    const {
+      ctx
+    } = this;
+    const {
+      x,
+      y
+    } = box;
+    ctx.save();
+    ctx.beginPath();
+    if (orientation === 'vertical') {
+      const sx = x + 4;
+      const sy = y + 2;
+      ctx.moveTo(npx(sx), npx(sy));
+      ctx.lineTo(npx(sx), npx(sy + 6));
+      ctx.moveTo(npx(sx - 2), npx(sy + 3));
+      ctx.lineTo(npx(sx), npx(sy + 6));
+      ctx.moveTo(npx(sx + 2), npx(sy + 3));
+      ctx.lineTo(npx(sx), npx(sy + 6));
+    } else {
+      const sx = x + 2;
+      const sy = y + 4;
+      ctx.moveTo(npx(sx), npx(sy));
+      ctx.lineTo(npx(sx + 6), npx(sy));
+      ctx.moveTo(npx(sx + 3), npx(sy - 2));
+      ctx.lineTo(npx(sx + 6), npx(sy));
+      ctx.moveTo(npx(sx + 3), npx(sy + 2));
+      ctx.lineTo(npx(sx + 6), npx(sy));
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(0, 0, 0, .45)';
+    ctx.stroke();
+    ctx.restore();
+  }
+
   error(box) {
-    const { ctx } = this;
-    const { x, y, width } = box;
+    const {
+      ctx
+    } = this;
+    const {
+      x,
+      y,
+      width
+    } = box;
     const sx = x + width - 1;
     ctx.save();
     ctx.beginPath();
@@ -364,8 +477,14 @@ class Draw {
   }
 
   frozen(box) {
-    const { ctx } = this;
-    const { x, y, width } = box;
+    const {
+      ctx
+    } = this;
+    const {
+      x,
+      y,
+      width
+    } = box;
     const sx = x + width - 1;
     ctx.save();
     ctx.beginPath();
@@ -379,9 +498,15 @@ class Draw {
   }
 
   rect(box, dtextcb) {
-    const { ctx } = this;
     const {
-      x, y, width, height, bgcolor,
+      ctx
+    } = this;
+    const {
+      x,
+      y,
+      width,
+      height,
+      bgcolor,
     } = box;
     ctx.save();
     ctx.beginPath();

@@ -158,8 +158,8 @@ declare module 'x-data-spreadsheet' {
     cellText(
       rowIndex: number,
       colIndex: number,
-      sheetIndex?: number,
-      text?: string
+      text: string,
+      sheetIndex?: number
     ): string;
 
     setSelectedCellAttr(property: any, value: any, sheetIndex?: number);

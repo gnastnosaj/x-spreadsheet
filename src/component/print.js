@@ -147,14 +147,15 @@ export default class Print {
     const cr = data.contentRange();
     cr.eci = data.cols.len;
     const iwidth = width - padding * 2;
-    const scale = iwidth / cr.w;
+    let scale = iwidth / cr.w;
     const iheight = height - padding * 2 - data.freezeTotalHeight() * scale;
-    const pages = parseInt((cr.h - data.freezeTotalHeight()) * scale / iheight, 10) + 1;
     let left = padding;
     const top = padding;
-    // if (scale > 1) {
-    //   left += (iwidth - cr.w) / 2;
-    // }
+    if (scale > 1) {
+      // left += (iwidth - cr.w) / 2;
+      scale = 1;
+    }
+    const pages = parseInt((cr.h - data.freezeTotalHeight()) * scale / iheight, 10) + 1;
     let ri = data.freeze[0];
     let yoffset = 0;
     this.contentEl.html('');

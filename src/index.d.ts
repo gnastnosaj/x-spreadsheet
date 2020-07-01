@@ -191,6 +191,11 @@ declare module 'x-data-spreadsheet' {
      */
     beforeSave(beforeSave: () => any);
     /**
+     * save
+     * @param callback
+     */
+    save(callback: (result: boolean) => void);
+    /**
      * set locale
      * @param lang
      * @param message

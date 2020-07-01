@@ -1125,22 +1125,34 @@ export default class Sheet {
     return this;
   }
 
-  save() {
+  save(cb) {
     if (this.beforeSave) {
       const result = this.beforeSave();
       if (result == null || result === true) {
         this.editor.clear();
         this.data.saveData();
         sheetReset.call(this);
+        if (cb) {
+          cb(true);
+        }
       } else if (typeof result === 'object') {
         result.subscribe(r => {
-          if (r === false) {
+          if (r !== false) {
             this.editor.clear();
             this.data.saveData();
             sheetReset.call(this);
+            if (cb) {
+              cb(true);
+            }
+          } else if (cb) {
+            cb(false);
           }
         });
+      } else if (cb) {
+        cb(false);
       }
+    } else if (cb) {
+      cb(true);
     }
   }
 

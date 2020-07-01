@@ -131,6 +131,10 @@ class Spreadsheet {
     return this;
   }
 
+  save(cb) {
+    this.sheet.save(cb);
+  }
+
   static locale(lang, message) {
     locale(lang, message);
   }

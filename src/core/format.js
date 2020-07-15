@@ -64,7 +64,7 @@ const baseFormats = [
     key: 'date',
     title: tf('format.date'),
     type: 'date',
-    label: '26/09/2008',
+    label: '2008-09-26',
     render: formatStringRender,
   },
   {
@@ -78,7 +78,7 @@ const baseFormats = [
     key: 'datetime',
     title: tf('format.datetime'),
     type: 'date',
-    label: '26/09/2008 15:59:00',
+    label: '2008-09-26 15:59:00',
     render: formatStringRender,
   },
   {

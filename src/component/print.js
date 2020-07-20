@@ -210,10 +210,18 @@ export default class Print {
       }) => {
         renderCell(draw, data, sri, sci, yof);
       });
+      for (let hri = 0; hri < data.freeze[0]; hri += 1) {
+        for (let ci = 0; ci <= cr.eci; ci += 1) {
+          const cell = data.getCell(hri, ci);
+          if (cell && cell.merge) {
+            renderCell(draw, data, hri, ci, 0);
+          }
+        }
+      }
       draw.restore();
 
       mViewRange.sri = mViewRange.eri;
-      mViewRange.sci = mViewRange.eci;
+      //mViewRange.sci = mViewRange.eci;
       yoffset += yo;
       this.contentEl.child(h('div', `${cssPrefix}-canvas-card-wraper`).child(wrap.child(canvas)));
     }

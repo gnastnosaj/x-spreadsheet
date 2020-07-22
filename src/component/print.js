@@ -145,7 +145,6 @@ export default class Print {
       padding
     } = paper;
     const cr = data.contentRange();
-    cr.eci = data.cols.len;
     const iwidth = width - padding * 2;
     let scale = iwidth / cr.w;
     const iheight = height - padding * 2 - data.freezeTotalHeight() * scale;
@@ -154,6 +153,9 @@ export default class Print {
     if (scale > 1) {
       // left += (iwidth - cr.w) / 2;
       scale = 1;
+    }
+    if (scale < 0.5) {
+      scale = 0.5;
     }
     const pages = parseInt((cr.h - data.freezeTotalHeight()) * scale / iheight, 10) + 1;
     let ri = data.freeze[0];

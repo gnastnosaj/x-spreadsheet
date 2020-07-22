@@ -313,18 +313,27 @@ class Rows {
   }
 
   maxCell() {
-    const keys = Object.keys(this._);
-    const ri = keys[keys.length - 1];
-    const col = this._[ri];
-    if (col) {
-      const {
-        cells
-      } = col;
-      const ks = Object.keys(cells);
-      const ci = ks[ks.length - 1];
-      return [parseInt(ri, 10), parseInt(ci, 10)];
+    let sri = 0;
+    let sci = 0;
+    for (const ri of Object.keys(this._)) {
+      const col = this._[ri];
+      if (col) {
+        const {
+          cells
+        } = col;
+        for (const ci of Object.keys(cells)) {
+          if (Object.keys(cells[ci]).length !== 0) {
+            if (sri < parseInt(ri, 10)) {
+              sri = parseInt(ri, 10);
+            }
+            if (sci < parseInt(ci, 10)) {
+              sci = parseInt(ci, 10);
+            }
+          }
+        }
+      }
     }
-    return [0, 0];
+    return [sri, sci];
   }
 
   each(cb) {

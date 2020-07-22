@@ -1003,9 +1003,9 @@ function sheetInitEvents() {
       }
 
       const cell = this.data.getSelectedCell();
-      if (!cell || cell.editable !== false) {
+      if (!cell || cell.editable !== false || cell.element !== 'text') {
         if (key === 'Delete') {
-          insertDeleteRowColumn.call(this, 'delete-cell-text');
+          insertDeleteRowColumn.call(this, 'delete-cell');
           evt.preventDefault();
         } else if ((keyCode >= 65 && keyCode <= 90) ||
           (keyCode >= 48 && keyCode <= 57) ||

@@ -49,6 +49,8 @@ export default {
     size: '纸张大小',
     orientation: '方向',
     orientations: ['横向', '纵向'],
+    align: '对齐',
+    aligns: ['左对齐', '居中对齐', '右对齐'],
   },
   format: {
     normal: '正常',

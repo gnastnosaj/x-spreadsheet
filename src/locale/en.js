@@ -49,6 +49,8 @@ export default {
     size: 'Paper size',
     orientation: 'Page orientation',
     orientations: ['Landscape', 'Portrait'],
+    align: 'Page align',
+    aligns: ['Left', 'Center', 'Right'],
   },
   format: {
     normal: 'Normal',

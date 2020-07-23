@@ -32,6 +32,8 @@ const PAGER_SIZES = [
 
 const PAGER_ORIENTATIONS = ['landscape', 'portrait'];
 
+const PAGER_ALIGNS = ['left', 'center', 'right'];
+
 function inches2px(inc) {
   return 96 * inc;
 }
@@ -70,6 +72,18 @@ function pagerOrientationChange(evt) {
   this.preview();
 }
 
+function pageAlignChange(evt) {
+  const {
+    paper
+  } = this;
+  const {
+    value
+  } = evt.target;
+  const v = PAGER_ALIGNS[value];
+  paper.align = v;
+  this.preview();
+}
+
 export default class Print {
   constructor(data) {
     this.paper = {
@@ -77,6 +91,7 @@ export default class Print {
       h: inches2px(PAGER_SIZES[1][2]),
       padding: 50,
       orientation: PAGER_ORIENTATIONS[1],
+      align: PAGER_ALIGNS[0],
       get width() {
         return this.orientation === 'landscape' ? this.h : this.w;
       },
@@ -124,6 +139,17 @@ export default class Print {
                   }),
                 ).on('change', pagerOrientationChange.bind(this)),
               ),
+              h('fieldset', '').children(
+                h('label', '').child(`${t('print.align')}`),
+                h('select', '').children(
+                  ...PAGER_ALIGNS.map((it, index) => {
+                    const option = h('option', '').attr('value', index).attr('selected', index == 0 ? 'selected' : null);
+                    option.el.selected = (index == 0);
+                    option.child(`${t('print.aligns')[index]}`);
+                    return option;
+                  }),
+                ).on('change', pageAlignChange.bind(this))
+              )
             ),
           ),
         ),
@@ -151,12 +177,17 @@ export default class Print {
     let left = padding;
     const top = padding;
     if (scale > 1) {
-      // left += (iwidth - cr.w) / 2;
       scale = 1;
     }
     if (scale < 0.5) {
       scale = 0.5;
     }
+    if (paper.align === 'center') {
+      left += (iwidth - cr.w * scale) / 2;
+    } else if (paper.align === 'right') {
+      left = width - padding - cr.w * scale;
+    }
+
     const pages = parseInt((cr.h - data.freezeTotalHeight()) * scale / iheight, 10) + 1;
     let ri = data.freeze[0];
     let yoffset = 0;

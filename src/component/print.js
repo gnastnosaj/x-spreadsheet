@@ -3,7 +3,8 @@ import {
   h
 } from './element';
 import {
-  cssPrefix
+  cssPrefix,
+  dpr
 } from '../config';
 import Button from './button';
 import {
@@ -171,9 +172,9 @@ export default class Print {
       padding
     } = paper;
     const cr = data.contentRange();
-    const iwidth = width - padding * 2;
+    const iwidth = (width - padding * 2) / dpr;
     let scale = iwidth / cr.w;
-    const iheight = height - padding * 2 - data.freezeTotalHeight() * scale;
+    const iheight = (height - padding * 2) / dpr;
     let left = padding;
     const top = padding;
     if (scale > 1) {
@@ -185,10 +186,10 @@ export default class Print {
     if (paper.align === 'center') {
       left += (iwidth - cr.w * scale) / 2;
     } else if (paper.align === 'right') {
-      left = width - padding - cr.w * scale;
+      left = width / dpr - padding - cr.w * scale;
     }
 
-    const pages = parseInt((cr.h - data.freezeTotalHeight()) * scale / iheight, 10) + 1;
+    const pages = parseInt(cr.h * scale / iheight, 10) + 1;
     let ri = data.freeze[0];
     let yoffset = 0;
     this.contentEl.html('');

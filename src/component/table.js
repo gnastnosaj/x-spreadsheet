@@ -98,6 +98,8 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
     let cellText = _cell.render(cell.text || '', formulam, (y, x) => (data.getCellTextOrDefault(x, y)));
     if (cell.element === 'field') {
       cellText = cell.field ? cell.field : '';
+    } else if (cell.element === 'expression') {
+      cellText = cell.expression ? cell.expression : '';
     }
     if (style.format) {
       // console.log(data.formatm, '>>', cell.format);

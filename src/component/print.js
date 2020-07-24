@@ -175,8 +175,8 @@ export default class Print {
     const iwidth = (width - padding * 2) / dpr;
     let scale = iwidth / cr.w;
     const iheight = (height - padding * 2) / dpr;
-    let left = padding;
-    const top = padding;
+    let left = padding / dpr;
+    const top = padding / dpr;
     if (scale > 1) {
       scale = 1;
     }
@@ -186,7 +186,7 @@ export default class Print {
     if (paper.align === 'center') {
       left += (iwidth - cr.w * scale) / 2;
     } else if (paper.align === 'right') {
-      left = width / dpr - padding - cr.w * scale;
+      left = (width - padding) / dpr - cr.w * scale;
     }
 
     const pages = parseInt(cr.h * scale / iheight, 10) + 1;
@@ -201,7 +201,7 @@ export default class Print {
       eci: 0,
     };
     for (let i = 0; i < pages; i += 1) {
-      let th = 0;
+      let th = data.freezeTotalHeight() * scale;
       let yo = 0;
       const wrap = h('div', `${cssPrefix}-canvas-card`).css('height', `${height}px`).css('width', `${width}px`);
       const canvas = h('canvas', `${cssPrefix}-canvas`);
@@ -219,15 +219,15 @@ export default class Print {
         }
       }
       for (; ri <= cr.eri; ri += 1) {
-        const rh = data.rows.getHeight(ri);
+        const rh = data.rows.getHeight(ri) * scale;
         th += rh;
-        if (th * scale <= iheight) {
+        if (th <= iheight) {
           for (let ci = 0; ci <= cr.eci; ci += 1) {
             renderCell(draw, data, ri, ci, yoffset);
             mViewRange.eci = ci;
           }
         } else {
-          yo = -(th - rh);
+          yo = -(th - rh) / scale + data.freezeTotalHeight();
           break;
         }
       }

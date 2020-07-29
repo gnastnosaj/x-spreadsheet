@@ -220,8 +220,23 @@ export default class Print {
       }
       for (; ri <= cr.eri; ri += 1) {
         const rh = data.rows.getHeight(ri) * scale;
+        let merge = 0;
+        let extra = 0;
+        const row = data.rows.get(`${ri}`);
+        if (row != null) {
+          const cells = row.cells;
+          for (const ci of Object.keys(cells)) {
+            const cell = cells[ci];
+            if (cell.merge && cell.merge[0] > merge) {
+              merge = cell.merge[0];
+            }
+          }
+          for (let i = 0; i < merge; i++) {
+            extra += data.rows.getHeight(ri + i + 1) * scale;
+          }
+        }
         th += rh;
-        if (th <= iheight) {
+        if (th + extra <= iheight) {
           for (let ci = 0; ci <= cr.eci; ci += 1) {
             renderCell(draw, data, ri, ci, yoffset);
             mViewRange.eci = ci;
@@ -231,7 +246,7 @@ export default class Print {
           break;
         }
       }
-      mViewRange.eri = ri;
+      mViewRange.eri = ri - 1;
       draw.restore();
       // merge-cell
       draw.save();

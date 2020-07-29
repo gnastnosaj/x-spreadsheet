@@ -323,11 +323,15 @@ class Rows {
         } = col;
         for (const ci of Object.keys(cells)) {
           if (Object.keys(cells[ci]).length !== 0) {
-            if (sri < parseInt(ri, 10)) {
-              sri = parseInt(ri, 10);
+            const cell = cells[ci];
+            const merge = cell.merge ? cell.merge : [0, 0];
+            let max = parseInt(ri, 10) + merge[0];
+            if (sri < max) {
+              sri = max;
             }
-            if (sci < parseInt(ci, 10)) {
-              sci = parseInt(ci, 10);
+            max = parseInt(ci, 10) + merge[1];
+            if (sci < max) {
+              sci = max;
             }
           }
         }

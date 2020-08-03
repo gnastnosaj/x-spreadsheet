@@ -860,8 +860,10 @@ function sheetInitEvents() {
   });
 
   bind(window, 'paste', (evt) => {
-    paste.call(this, 'all', evt);
-    evt.preventDefault();
+    if (this.focusing) {
+      paste.call(this, 'all', evt);
+      evt.preventDefault();
+    }
   });
 
   // for selector

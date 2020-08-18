@@ -212,12 +212,6 @@ export default class Print {
       draw.translate(left, top);
       if (scale < 1) draw.scale(scale, scale);
       // console.log('ri:', ri, cr.eri, yoffset);
-      for (let hri = 0; hri < data.freeze[0]; hri += 1) {
-        for (let ci = 0; ci <= cr.eci; ci += 1) {
-          renderCell(draw, data, hri, ci, 0);
-          mViewRange.eci = ci;
-        }
-      }
       for (; ri <= cr.eri; ri += 1) {
         const rh = data.rows.getHeight(ri) * scale;
         let merge = 0;
@@ -261,10 +255,7 @@ export default class Print {
       });
       for (let hri = 0; hri < data.freeze[0]; hri += 1) {
         for (let ci = 0; ci <= cr.eci; ci += 1) {
-          const cell = data.getCell(hri, ci);
-          if (cell && cell.merge) {
-            renderCell(draw, data, hri, ci, 0);
-          }
+          renderCell(draw, data, hri, ci, 0);
         }
       }
       draw.restore();

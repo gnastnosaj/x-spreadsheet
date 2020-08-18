@@ -652,6 +652,7 @@ function insertDeleteRowColumn(type) {
   const {
     data
   } = this;
+  if (data.settings.mode === 'read') return;
   if (type === 'insert-row') {
     data.insert('row');
   } else if (type === 'delete-row') {

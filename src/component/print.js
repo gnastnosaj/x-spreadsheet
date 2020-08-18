@@ -36,7 +36,7 @@ const PAGER_ORIENTATIONS = ['landscape', 'portrait'];
 const PAGER_ALIGNS = ['left', 'center', 'right'];
 
 function inches2px(inc) {
-  return 96 * inc;
+  return parseInt(96 * inc, 10);
 }
 
 function btnClick(type) {

@@ -180,9 +180,10 @@ export default class Print {
     if (scale > 1) {
       scale = 1;
     }
-    if (scale < 0.5) {
-      scale = 0.5;
+    if (scale < 0.8) {
+      scale = 0.8;
     }
+    // scale = 1;
     if (paper.align === 'center') {
       left += (iwidth - cr.w * scale) / 2;
     } else if (paper.align === 'right') {
@@ -253,11 +254,28 @@ export default class Print {
       }) => {
         renderCell(draw, data, sri, sci, yof);
       });
+      // freeze-cell
       for (let hri = 0; hri < data.freeze[0]; hri += 1) {
         for (let ci = 0; ci <= cr.eci; ci += 1) {
           renderCell(draw, data, hri, ci, 0);
         }
       }
+      data.eachMergesInView({
+        sri: 0,
+        sci: 0,
+        eri: data.freeze[0],
+        eci: cr.eci,
+      }, ({
+        sri,
+        sci
+      }) => {
+        renderCell(draw, data, sri, sci, 0);
+      });
+      draw.restore();
+      // clear
+      draw.save();
+      draw.clearRect(0, 0, padding, paper.height);
+      draw.clearRect(paper.width - padding, 0, padding, paper.height);
       draw.restore();
 
       mViewRange.sri = mViewRange.eri;

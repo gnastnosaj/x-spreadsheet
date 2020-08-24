@@ -11,6 +11,9 @@ import {
 import {
   formatm
 } from '../core/format';
+import {
+  dpr
+} from '../config';
 
 import {
   Draw,
@@ -369,12 +372,92 @@ function renderFreezeHighlightLine(fw, fh, ftw, fth) {
   draw.restore();
 }
 
+function renderPageSizeHighlightLine(fw, fh, ftw, fth) {
+  const {
+    draw,
+    data
+  } = this;
+  const {
+    x,
+    y
+  } = data.scroll;
+  draw.save()
+    .translate(fw, fh)
+    .attr({
+      strokeStyle: 'rgba(75, 137, 255, .6)'
+    });
+  draw.ctx.setLineDash([5]);
+
+  const cr = data.contentRange();
+  const twidth = data.viewWidth() - fw;
+  const theight = data.viewHeight() - fh;
+
+  const iwidth = (this.paper.width - this.paper.padding * 2) / dpr;
+  let scale = iwidth / cr.w;
+  if (scale > 1) {
+    scale = 1;
+  }
+  if (scale < 0.8) {
+    scale = 0.8;
+  }
+  let pwidth = (this.paper.width - this.paper.padding * 2) / scale - x;
+  while (pwidth < twidth) {
+    if (pwidth > 0) {
+      draw.line([pwidth, 0], [pwidth, theight]);
+    }
+    pwidth += (this.paper.width - this.paper.padding * 2) / scale;
+  }
+
+  const iheight = (this.paper.height - this.paper.padding * 2) / dpr;
+  const pages = parseInt(cr.h * scale / iheight, 10) + 1;
+  let pheight = -y;
+  let ri = data.freeze[0];
+  for (let i = 0; i < pages; i += 1) {
+    let th = data.freezeTotalHeight() * scale;
+    for (; ri <= cr.eri; ri += 1) {
+      const rh = data.rows.getHeight(ri) * scale;
+      let merge = 0;
+      let extra = 0;
+      const row = data.rows.get(`${ri}`);
+      if (row != null) {
+        const cells = row.cells;
+        for (const ci of Object.keys(cells)) {
+          const cell = cells[ci];
+          if (cell.merge && cell.merge[0] > merge) {
+            merge = cell.merge[0];
+          }
+        }
+        for (let i = 0; i < merge; i++) {
+          extra += data.rows.getHeight(ri + i + 1) * scale;
+        }
+      }
+      th += rh;
+      if (th + extra > iheight) {
+        pheight += (th - rh - (i === 0 ? 0 : data.freezeTotalHeight() * scale)) / scale;
+        if (pheight > data.freezeTotalHeight()) {
+          draw.line([0, pheight], [twidth, pheight]);
+        }
+        break;
+      }
+    }
+  }
+  while (pheight < theight) {
+    if (pheight > data.freezeTotalHeight()) {
+      draw.line([0, pheight], [twidth, pheight]);
+    }
+    pheight += (this.paper.height - this.paper.padding * 2) / scale;
+  }
+
+  draw.restore();
+}
+
 /** end */
 class Table {
-  constructor(el, data) {
+  constructor(el, data, paper) {
     this.el = el;
     this.draw = new Draw(el, data.viewWidth(), data.viewHeight());
     this.data = data;
+    this.paper = paper;
   }
 
   resetData(data) {
@@ -442,6 +525,8 @@ class Table {
       // 5
       renderFreezeHighlightLine.call(this, fw, fh, tx, ty);
     }
+    // 6
+    renderPageSizeHighlightLine.call(this, fw, fh);
   }
 
   clear() {

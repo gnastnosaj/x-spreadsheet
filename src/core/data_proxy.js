@@ -467,7 +467,7 @@ export default class DataProxy {
   }
 
   canSave() {
-    return !this.clean;
+    return this.settings.mode === 'edit' && !this.clean;
   }
 
   canUndo() {

@@ -1081,7 +1081,7 @@ export default class Sheet {
       this.sortFilter.el,
     );
     // table
-    this.table = new Table(this.tableEl.el, data);
+    this.table = new Table(this.tableEl.el, data, this.print.paper);
     sheetInitEvents.call(this);
     sheetReset.call(this);
     // init selector [0, 0]

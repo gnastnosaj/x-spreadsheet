@@ -397,8 +397,8 @@ function renderPageSizeHighlightLine(fw, fh, ftw, fth) {
   if (scale > 1) {
     scale = 1;
   }
-  if (scale < 0.8) {
-    scale = 0.8;
+  if (scale < 0.7) {
+    scale = 0.7;
   }
   let pwidth = (this.paper.width - this.paper.padding * 2) / scale - x;
   while (pwidth < twidth) {

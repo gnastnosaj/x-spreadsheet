@@ -180,10 +180,9 @@ export default class Print {
     if (scale > 1) {
       scale = 1;
     }
-    if (scale < 0.8) {
-      scale = 0.8;
+    if (scale < 0.7) {
+      scale = 0.7;
     }
-    // scale = 1;
     if (paper.align === 'center') {
       left += (iwidth - cr.w * scale) / 2;
     } else if (paper.align === 'right') {

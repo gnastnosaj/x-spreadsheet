@@ -607,7 +607,6 @@ export default class DataProxy {
     this.changeData(() => {
       const {
         selector,
-        styles,
         rows
       } = this;
       if (property === 'merge') {
@@ -644,31 +643,15 @@ export default class DataProxy {
           cell.text = `=${value}()`;
         }
       } else {
-        selector.range.each((ri, ci) => {
-          const cell = rows.getCellOrNew(ri, ci);
-          let cstyle = {};
-          if (cell.style !== undefined) {
-            cstyle = helper.cloneDeep(styles[cell.style]);
-          }
-          if (property === 'format') {
-            cstyle.format = value;
-            cell.style = this.addStyle(cstyle);
-          } else if (property === 'font-bold' || property === 'font-italic' ||
-            property === 'font-name' || property === 'font-size') {
-            const nfont = {};
-            nfont[property.split('-')[1]] = value;
-            cstyle.font = Object.assign(cstyle.font || {}, nfont);
-            cell.style = this.addStyle(cstyle);
-          } else if (property === 'strike' || property === 'textwrap' ||
-            property === 'underline' ||
-            property === 'align' || property === 'valign' ||
-            property === 'color' || property === 'bgcolor') {
-            cstyle[property] = value;
-            cell.style = this.addStyle(cstyle);
-          } else {
-            cell[property] = value;
-          }
-        });
+        if (this.isSignleSelected()) {
+          const {
+            sri,
+            sci,
+          } = this.selector.range;
+          this.setCellAttr(sri, sci, property, value);
+        } else {
+          selector.range.each((ri, ci) => this.setCellAttr(ri, ci, property, value));
+        }
       }
     });
   }
@@ -1185,6 +1168,36 @@ export default class DataProxy {
     }
     // validator
     validations.validate(ri, ci, text);
+  }
+
+  setCellAttr(ri, ci, property, value) {
+    const {
+      styles,
+      rows
+    } = this;
+    const cell = rows.getCellOrNew(ri, ci);
+    let cstyle = {};
+    if (cell.style !== undefined) {
+      cstyle = helper.cloneDeep(styles[cell.style]);
+    }
+    if (property === 'format') {
+      cstyle.format = value;
+      cell.style = this.addStyle(cstyle);
+    } else if (property === 'font-bold' || property === 'font-italic' ||
+      property === 'font-name' || property === 'font-size') {
+      const nfont = {};
+      nfont[property.split('-')[1]] = value;
+      cstyle.font = Object.assign(cstyle.font || {}, nfont);
+      cell.style = this.addStyle(cstyle);
+    } else if (property === 'strike' || property === 'textwrap' ||
+      property === 'underline' ||
+      property === 'align' || property === 'valign' ||
+      property === 'color' || property === 'bgcolor') {
+      cstyle[property] = value;
+      cell.style = this.addStyle(cstyle);
+    } else {
+      cell[property] = value;
+    }
   }
 
   freezeIsActive() {

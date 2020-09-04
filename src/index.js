@@ -99,8 +99,12 @@ class Spreadsheet {
     return this.datas[sheetIndex].getCellStyle(ri, ci);
   }
 
+  setSelectedCellAttrs(attrs, sheetIndex = 0) {
+    this.datas[sheetIndex].setSelectedCellAttrs(attrs);
+  }
+
   setSelectedCellAttr(property, value, sheetIndex = 0) {
-    return this.datas[sheetIndex].setSelectedCellAttr(property, value);
+    this.datas[sheetIndex].setSelectedCellAttr(property, value);
   }
 
   reRender() {

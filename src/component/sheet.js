@@ -458,6 +458,19 @@ function toolbarChangePaintformatPaste() {
   }
 }
 
+function tableMousedown(evt) {
+  const {
+    data,
+  } = this;
+  const {
+    offsetX,
+    offsetY
+  } = evt;
+  const cellRect = data.getCellRectByXY(offsetX, offsetY);
+  const cell = data.getCell(cellRect.ri, cellRect.ci);
+  this.trigger('cell-clicked', cell, cellRect, evt);
+}
+
 function overlayerMousedown(evt) {
   // console.log(':::::overlayer.mousedown:', evt.detail, evt.button, evt.buttons, evt.shiftKey);
   // console.log('evt.target.className:', evt.target.className);
@@ -731,6 +744,7 @@ function sortFilterChange(ci, order, operator, value) {
 
 function sheetInitEvents() {
   const {
+    tableEl,
     selector,
     overlayerEl,
     rowResizer,
@@ -743,6 +757,10 @@ function sheetInitEvents() {
     modalValidation,
     sortFilter,
   } = this;
+  tableEl
+    .on('mousedown', (evt) => {
+      tableMousedown.call(this, evt);
+    });
   // overlayer
   overlayerEl
     .on('mousemove', (evt) => {

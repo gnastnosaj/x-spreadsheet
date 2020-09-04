@@ -603,55 +603,67 @@ export default class DataProxy {
     return cellRange;
   }
 
-  setSelectedCellAttr(property, value) {
-    this.changeData(() => {
+  setSelectedCellPropertyToValue(property, value) {
+    const {
+      selector,
+      rows
+    } = this;
+    if (property === 'merge') {
+      if (value) this.merge();
+      else this.unmerge();
+    } else if (property === 'border') {
+      setStyleBorders.call(this, value);
+    } else if (property === 'formula') {
+      // console.log('>>>', selector.multiple());
       const {
-        selector,
-        rows
-      } = this;
-      if (property === 'merge') {
-        if (value) this.merge();
-        else this.unmerge();
-      } else if (property === 'border') {
-        setStyleBorders.call(this, value);
-      } else if (property === 'formula') {
-        // console.log('>>>', selector.multiple());
+        ri,
+        ci,
+        range
+      } = selector;
+      if (selector.multiple()) {
+        const [rn, cn] = selector.size();
         const {
-          ri,
-          ci,
-          range
-        } = selector;
-        if (selector.multiple()) {
-          const [rn, cn] = selector.size();
-          const {
-            sri,
-            sci,
-            eri,
-            eci,
-          } = range;
-          if (rn > 1) {
-            for (let i = sci; i <= eci; i += 1) {
-              const cell = rows.getCellOrNew(eri + 1, i);
-              cell.text = `=${value}(${xy2expr(i, sri)}:${xy2expr(i, eri)})`;
-            }
-          } else if (cn > 1) {
-            const cell = rows.getCellOrNew(ri, eci + 1);
-            cell.text = `=${value}(${xy2expr(sci, ri)}:${xy2expr(eci, ri)})`;
+          sri,
+          sci,
+          eri,
+          eci,
+        } = range;
+        if (rn > 1) {
+          for (let i = sci; i <= eci; i += 1) {
+            const cell = rows.getCellOrNew(eri + 1, i);
+            cell.text = `=${value}(${xy2expr(i, sri)}:${xy2expr(i, eri)})`;
           }
-        } else {
-          const cell = rows.getCellOrNew(ri, ci);
-          cell.text = `=${value}()`;
+        } else if (cn > 1) {
+          const cell = rows.getCellOrNew(ri, eci + 1);
+          cell.text = `=${value}(${xy2expr(sci, ri)}:${xy2expr(eci, ri)})`;
         }
       } else {
-        if (this.isSignleSelected()) {
-          const {
-            sri,
-            sci,
-          } = this.selector.range;
-          this.setCellAttr(sri, sci, property, value);
-        } else {
-          selector.range.each((ri, ci) => this.setCellAttr(ri, ci, property, value));
-        }
+        const cell = rows.getCellOrNew(ri, ci);
+        cell.text = `=${value}()`;
+      }
+    } else {
+      if (this.isSignleSelected()) {
+        const {
+          sri,
+          sci,
+        } = this.selector.range;
+        this.setCellAttr(sri, sci, property, value);
+      } else {
+        selector.range.each((ri, ci) => this.setCellAttr(ri, ci, property, value));
+      }
+    }
+  }
+
+  setSelectedCellAttr(property, value) {
+    this.changeData(() => {
+      this.setSelectedCellPropertyToValue(property, value);
+    });
+  }
+
+  setSelectedCellAttrs(attrs) {
+    this.changeData(() => {
+      for (const attr of attrs) {
+        this.setSelectedCellPropertyToValue(attr.property, attr.value);
       }
     });
   }

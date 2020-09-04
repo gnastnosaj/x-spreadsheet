@@ -162,6 +162,8 @@ declare module 'x-data-spreadsheet' {
       sheetIndex?: number
     ): string;
 
+    setSelectedCellAttrs(attrs: Array<{ property: any, value: any }>, sheetIndex?: number);
+
     setSelectedCellAttr(property: any, value: any, sheetIndex?: number);
 
     reRender();

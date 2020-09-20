@@ -498,10 +498,34 @@ export default class DataProxy {
 
   copy() {
     this.clipboard.copy(this.selector.range);
+    this.execCopyCommand();
   }
 
   cut() {
     this.clipboard.cut(this.selector.range);
+    this.execCopyCommand();
+  }
+
+  execCopyCommand() {
+    let value = '';
+
+    this.selector.range.each((i, j) => {
+      const text = this.getCellTextOrDefault(i, j);
+      if (text !== '') {
+        if (value === '') {
+          value = text;
+        } else {
+          value = `${value}, ${text}`;
+        }
+      }
+    });
+
+    const element = document.createElement('input');
+    element.value = value;
+    document.body.append(element);
+    element.select();
+    document.execCommand('copy');
+    element.remove();
   }
 
   // what: all | text | format

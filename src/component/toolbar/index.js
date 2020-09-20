@@ -235,5 +235,7 @@ export default class Toolbar {
     this.textwrapEl.setState(style.textwrap);
     // console.log('freeze is Active:', data.freezeIsActive());
     this.freezeEl.setState(data.freezeIsActive());
+    this.autofilterEl.setState(data.settings.mode === 'read');
+    this.formulaEl.setState(data.settings.mode === 'read');
   }
 }

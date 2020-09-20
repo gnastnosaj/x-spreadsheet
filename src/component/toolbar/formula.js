@@ -13,4 +13,8 @@ export default class Format extends DropdownItem {
   dropdown() {
     return new DropdownFormula();
   }
+
+  setState(disabled) {
+    this.el.disabled(disabled);
+  }
 }

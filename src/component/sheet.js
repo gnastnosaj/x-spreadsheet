@@ -570,11 +570,13 @@ function editorSetOffset() {
 function editorSet() {
   const {
     editor,
+    selector,
     data
   } = this;
   if (data.settings.mode === 'read') return;
   editorSetOffset.call(this);
   editor.setCell(data.getSelectedCell(), data.getSelectedValidator());
+  selector.hide();
   clearClipboard.call(this);
 }
 

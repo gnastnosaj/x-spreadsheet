@@ -11,6 +11,7 @@ import Resizer from './resizer';
 import Scrollbar from './scrollbar';
 import Selector from './selector';
 import Editor from './editor';
+import Overlayer from './overlayer';
 import Print from './print';
 import ContextMenu from './contextmenu';
 import Table from './table';
@@ -354,6 +355,7 @@ function sheetFreeze() {
     selector,
     data,
     editor,
+    overlayer,
   } = this;
   const [ri, ci] = data.freeze;
   if (ri > 0 || ci > 0) {
@@ -362,6 +364,7 @@ function sheetFreeze() {
     editor.setFreezeLengths(fwidth, fheight);
   }
   selector.resetAreaOffset();
+  overlayer.resetData(data);
 }
 
 function sheetReset() {
@@ -1067,6 +1070,8 @@ export default class Sheet {
     // scrollbar
     this.verticalScrollbar = new Scrollbar(true);
     this.horizontalScrollbar = new Scrollbar(false);
+    // overlayer
+    this.overlayer = new Overlayer(data);
     // editor
     this.editor = new Editor(
       formulas,
@@ -1081,6 +1086,7 @@ export default class Sheet {
     this.selector = new Selector(data);
     this.overlayerCEl = h('div', `${cssPrefix}-overlayer-content`)
       .children(
+        this.overlayer.el,
         this.editor.el,
         this.selector.el,
       );
@@ -1131,6 +1137,7 @@ export default class Sheet {
     horizontalScrollbarSet.call(this);
     this.toolbar.resetData(data);
     this.print.resetData(data);
+    this.overlayer.resetData(data);
     this.selector.resetData(data);
     this.table.resetData(data);
   }

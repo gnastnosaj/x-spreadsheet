@@ -217,7 +217,8 @@ body {
   height: 100%;
 }
 .x-spreadsheet-editor,
-.x-spreadsheet-selector {
+.x-spreadsheet-selector,
+.x-spreadsheet-overlayer-external {
   box-sizing: content-box;
   position: absolute;
   overflow: hidden;

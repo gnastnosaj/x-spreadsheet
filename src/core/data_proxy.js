@@ -606,6 +606,14 @@ export default class DataProxy {
   calSelectedRangeByStart(ri, ci) {
     const {
       selector,
+    } = this;
+    let cellRange = this.calRangeByStart(ri, ci);
+    selector.range = cellRange;
+    return cellRange;
+  }
+
+  calRangeByStart(ri, ci) {
+    const {
       rows,
       cols,
       merges,
@@ -623,7 +631,6 @@ export default class DataProxy {
         cellRange.eci = cols.len - 1;
       }
     }
-    selector.range = cellRange;
     return cellRange;
   }
 

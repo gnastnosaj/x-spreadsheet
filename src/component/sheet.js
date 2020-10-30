@@ -352,11 +352,12 @@ function horizontalScrollbarSet() {
 
 function sheetFreeze() {
   const {
-    selector,
     data,
-    editor,
     overlayer,
+    editor,
+    selector,
   } = this;
+  overlayer.resetData(data);
   const [ri, ci] = data.freeze;
   if (ri > 0 || ci > 0) {
     const fwidth = data.freezeTotalWidth();
@@ -364,7 +365,6 @@ function sheetFreeze() {
     editor.setFreezeLengths(fwidth, fheight);
   }
   selector.resetAreaOffset();
-  overlayer.resetData(data);
 }
 
 function sheetReset() {
@@ -587,9 +587,11 @@ function verticalScrollbarMove(distance) {
   const {
     data,
     table,
-    selector
+    overlayer,
+    selector,
   } = this;
   data.scrolly(distance, () => {
+    overlayer.resetOffset();
     selector.resetBRLAreaOffset();
     editorSetOffset.call(this);
     table.render();
@@ -600,9 +602,11 @@ function horizontalScrollbarMove(distance) {
   const {
     data,
     table,
-    selector
+    overlayer,
+    selector,
   } = this;
   data.scrollx(distance, () => {
+    overlayer.resetOffset();
     selector.resetBRTAreaOffset();
     editorSetOffset.call(this);
     table.render();
@@ -616,12 +620,14 @@ function rowResizerFinished(cRect, distance) {
   const {
     toolbar,
     table,
+    overlayer,
     selector,
     data
   } = this;
   data.setRowHeight(ri, distance);
   toolbar.reset();
   table.render();
+  overlayer.resetOffset();
   selector.resetAreaOffset();
   verticalScrollbarSet.call(this);
   editorSetOffset.call(this);
@@ -634,12 +640,14 @@ function colResizerFinished(cRect, distance) {
   const {
     toolbar,
     table,
+    overlayer,
     selector,
     data
   } = this;
   data.setColWidth(ci, distance);
   toolbar.reset();
   table.render();
+  overlayer.resetOffset();
   selector.resetAreaOffset();
   horizontalScrollbarSet.call(this);
   editorSetOffset.call(this);

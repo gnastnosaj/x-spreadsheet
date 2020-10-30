@@ -4,6 +4,9 @@ import {
 import {
     cssPrefix
 } from '../config';
+import {
+    CellRange
+} from '../core/cell_range';
 
 let startZIndex = 10;
 
@@ -25,6 +28,7 @@ class OverlayerElement {
     }
 
     setOffset(v) {
+        this.overlayerElement.el.offset = v;
         this.el.offset(v).show();
         return this;
     }
@@ -51,10 +55,29 @@ export default class Overlayer {
     resetData(data) {
         this.data = data;
 
-        this.tl.setData(data);
-        this.t.setData(data);
-        this.l.setData(data);
-        this.br.setData(data);
+        const {
+            freeze,
+            rows,
+            cols
+        } = data;
+        const [fri, fci] = freeze;
+
+        this.tl.setData({
+            dataProxy: data,
+            cellRange: new CellRange(0, 0, fri, fci)
+        });
+        this.t.setData({
+            dataProxy: data,
+            cellRange: new CellRange(0, fci, fri, cols.len)
+        });
+        this.l.setData({
+            dataProxy: data,
+            cellRange: new CellRange(fri, 0, rows.len, fci)
+        });
+        this.br.setData({
+            dataProxy: data,
+            cellRange: new CellRange(fri, fci, rows.len, cols.len)
+        });
 
         this.resetOffset();
     }

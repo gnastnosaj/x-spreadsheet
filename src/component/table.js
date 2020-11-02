@@ -241,6 +241,11 @@ function renderFixedHeaders(type, viewRange, w, h, tx, ty) {
     draw,
     data
   } = this;
+
+  if (data.settings.base) {
+    return;
+  }
+
   const sumHeight = viewRange.h; // rows.sumHeight(viewRange.sri, viewRange.eri + 1);
   const sumWidth = viewRange.w; // cols.sumWidth(viewRange.sci, viewRange.eci + 1);
   const nty = ty + h;
@@ -311,8 +316,14 @@ function renderFixedHeaders(type, viewRange, w, h, tx, ty) {
 
 function renderFixedLeftTopCell(fw, fh) {
   const {
-    draw
+    draw,
+    data
   } = this;
+
+  if (data.settings.base) {
+    return;
+  }
+
   draw.save();
   // left-top-cell
   draw.attr({
@@ -334,6 +345,11 @@ function renderContentGrid({
     draw,
     data
   } = this;
+
+  if (data.settings.base) {
+    return;
+  }
+
   const {
     settings
   } = data;
@@ -367,6 +383,11 @@ function renderFreezeHighlightLine(fw, fh, ftw, fth) {
     draw,
     data
   } = this;
+
+  if (data.settings.base) {
+    return;
+  }
+
   const twidth = data.viewWidth() - fw;
   const theight = data.viewHeight() - fh;
   draw.save()
@@ -384,6 +405,11 @@ function renderPageSizeHighlightLine(fw, fh, ftw, fth) {
     draw,
     data
   } = this;
+
+  if (data.settings.base) {
+    return;
+  }
+
   const {
     x,
     y

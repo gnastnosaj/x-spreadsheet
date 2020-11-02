@@ -370,6 +370,8 @@ function sheetFreeze() {
 function sheetReset() {
   const {
     tableEl,
+    overlayerEl0,
+    overlayerCEl0,
     overlayerEl,
     overlayerCEl,
     table,
@@ -380,6 +382,8 @@ function sheetReset() {
   const tOffset = this.getTableOffset();
   const vRect = this.getRect();
   tableEl.attr(vRect);
+  overlayerEl0.offset(vRect);
+  overlayerCEl0.offset(tOffset);
   overlayerEl.offset(vRect);
   overlayerCEl.offset(tOffset);
   el.css('width', `${vRect.width}px`);
@@ -1092,9 +1096,14 @@ export default class Sheet {
     this.contextMenu = new ContextMenu(() => this.getRect(), !showContextmenu);
     // selector
     this.selector = new Selector(data);
-    this.overlayerCEl = h('div', `${cssPrefix}-overlayer-content`)
+    this.overlayerCEl0 = h('div', `${cssPrefix}-overlayer-content`)
       .children(
         this.overlayer.el,
+      );
+    this.overlayerEl0 = h('div', `${cssPrefix}-overlayer`)
+      .child(this.overlayerCEl0);
+    this.overlayerCEl = h('div', `${cssPrefix}-overlayer-content`)
+      .children(
         this.editor.el,
         this.selector.el,
       );
@@ -1105,6 +1114,7 @@ export default class Sheet {
     // root element
     this.el.children(
       this.tableEl,
+      this.overlayerEl0.el,
       this.overlayerEl.el,
       this.rowResizer.el,
       this.colResizer.el,

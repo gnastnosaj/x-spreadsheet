@@ -833,11 +833,6 @@ form fieldset select {
 .x-spreadsheet-toast-content {
   padding: 0.75em 1em;
 }
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .x-spreadsheet-toolbar {
-    display: none;
-  }
-}
 .x-spreadsheet-icon {
   width: 18px;
   height: 18px;

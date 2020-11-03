@@ -887,7 +887,10 @@ function sheetInitEvents() {
     }
   };
 
-  bind(window, 'resize', () => {
+  bind(window, 'resize', (evt) => {
+    if (evt.payload != null && evt.payload !== this) {
+      return;
+    }
     this.reload();
   });
 

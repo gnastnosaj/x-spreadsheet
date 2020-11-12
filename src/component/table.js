@@ -345,11 +345,6 @@ function renderContentGrid({
     draw,
     data
   } = this;
-
-  if (data.settings.base) {
-    return;
-  }
-
   const {
     settings
   } = data;

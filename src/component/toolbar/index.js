@@ -179,10 +179,10 @@ export default class Toolbar {
       setTimeout(() => {
         initBtns2.call(this);
         moreResize.call(this);
+        bind(window, 'resize', () => {
+          moreResize.call(this);
+        });
       }, 0);
-      bind(window, 'resize', () => {
-        moreResize.call(this);
-      });
     }
   }
 

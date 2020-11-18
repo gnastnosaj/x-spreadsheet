@@ -1,6 +1,10 @@
 /* global window */
-import { h } from './element';
-import { bind } from './event';
+import {
+  h
+} from './element';
+import {
+  bind
+} from './event';
 import tooltip from './tooltip';
 import DropdownFont from './dropdown_font';
 import DropdownFontSize from './dropdown_fontsize';
@@ -11,8 +15,12 @@ import DropdownAlign from './dropdown_align';
 import DropdownBorder from './dropdown_border';
 import Dropdown from './dropdown';
 import Icon from './icon';
-import { cssPrefix } from '../config';
-import { t } from '../locale/locale';
+import {
+  cssPrefix
+} from '../config';
+import {
+  t
+} from '../locale/locale';
 
 function buildIcon(name) {
   return new Icon(name);
@@ -76,16 +84,26 @@ class DropdownMore extends Dropdown {
 function initBtns2() {
   this.btns2 = this.btnChildren.map((it) => {
     const rect = it.box();
-    const { marginLeft, marginRight } = it.computedStyle();
+    const {
+      marginLeft,
+      marginRight
+    } = it.computedStyle();
     return [it, rect.width + parseInt(marginLeft, 10) + parseInt(marginRight, 10)];
   });
 }
 
 function moreResize() {
   const {
-    el, btns, moreEl, ddMore, btns2,
+    el,
+    btns,
+    moreEl,
+    ddMore,
+    btns2,
   } = this;
-  const { moreBtns, contentEl } = ddMore;
+  const {
+    moreBtns,
+    contentEl
+  } = ddMore;
   el.css('width', `${this.widthFn() - 60}px`);
   const elBox = el.box();
 
@@ -172,10 +190,10 @@ export default class Toolbar {
     setTimeout(() => {
       initBtns2.call(this);
       moreResize.call(this);
+      bind(window, 'resize', () => {
+        moreResize.call(this);
+      });
     }, 0);
-    bind(window, 'resize', () => {
-      moreResize.call(this);
-    });
   }
 
   paintformatActive() {
@@ -191,7 +209,9 @@ export default class Toolbar {
   }
 
   reset() {
-    const { data } = this;
+    const {
+      data
+    } = this;
     const style = data.getSelectedCellStyle();
     const cell = data.getSelectedCell();
     // console.log('canUndo:', data.canUndo());
@@ -202,7 +222,9 @@ export default class Toolbar {
     this.autofilterEl.active(!data.canAutofilter());
     // this.mergeEl.disabled();
     // console.log('selectedCell:', style, cell);
-    const { font } = style;
+    const {
+      font
+    } = style;
     this.ddFont.setTitle(font.name);
     this.ddFontSize.setTitle(font.size);
     this.fontBoldEl.active(font.bold);

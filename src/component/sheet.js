@@ -763,6 +763,7 @@ function sheetInitEvents() {
   const {
     tableEl,
     selector,
+    overlayerEl0,
     overlayerEl,
     rowResizer,
     colResizer,
@@ -779,6 +780,10 @@ function sheetInitEvents() {
       tableMousedown.call(this, evt);
     });
   // overlayer
+  overlayerEl0
+    .on('mousewheel.stop', (evt) => {
+      overlayerMousescroll.call(this, evt);
+    });
   overlayerEl
     .on('mousemove', (evt) => {
       overlayerMousemove.call(this, evt);

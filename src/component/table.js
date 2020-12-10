@@ -104,7 +104,7 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
     } else if (cell.element === 'expression') {
       cellText = cell.expression ? cell.expression : '';
     }
-    if (cell.pattern === 'tree') {
+    if (cell.patternExt === 'tree') {
       if (cell.expanded === true) {
         cellText = `-  ${cellText}`;
       } else {

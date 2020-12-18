@@ -1,6 +1,12 @@
-import { h } from './element';
-import { cssPrefix } from '../config';
-import { CellRange } from '../core/cell_range';
+import {
+  h
+} from './element';
+import {
+  cssPrefix
+} from '../config';
+import {
+  CellRange
+} from '../core/cell_range';
 
 const selectorHeightBorderWidth = 2 * 2 - 1;
 let startZIndex = 10;
@@ -41,7 +47,10 @@ class SelectorElement {
 
   setAreaOffset(v) {
     const {
-      left, top, width, height,
+      left,
+      top,
+      width,
+      height,
     } = v;
     const of = {
       width: width - selectorHeightBorderWidth + 0.8,
@@ -49,16 +58,21 @@ class SelectorElement {
       left: left - 0.8,
       top: top - 0.8,
     };
-    this.areaEl.offset(of).show();
+    this.areaEl.offset( of ).show();
     if (this.useHideInput) {
-      this.hideInputDiv.offset(of);
-      this.hideInput.val('').focus();
+      this.hideInputDiv.offset( of );
+      setTimeout(() => {
+        this.hideInput.val('').focus();
+      });
     }
   }
 
   setClipboardOffset(v) {
     const {
-      left, top, width, height,
+      left,
+      top,
+      width,
+      height,
     } = v;
     this.clipboardEl.offset({
       left,
@@ -70,7 +84,10 @@ class SelectorElement {
 
   showAutofill(v) {
     const {
-      left, top, width, height,
+      left,
+      top,
+      width,
+      height,
     } = v;
     this.autofillEl.offset({
       width: width - selectorHeightBorderWidth,
@@ -94,9 +111,17 @@ class SelectorElement {
 }
 
 function calBRAreaOffset(offset) {
-  const { data } = this;
   const {
-    left, top, width, height, scroll, l, t,
+    data
+  } = this;
+  const {
+    left,
+    top,
+    width,
+    height,
+    scroll,
+    l,
+    t,
   } = offset;
   const ftwidth = data.freezeTotalWidth();
   const ftheight = data.freezeTotalHeight();
@@ -113,69 +138,105 @@ function calBRAreaOffset(offset) {
 }
 
 function calTAreaOffset(offset) {
-  const { data } = this;
   const {
-    left, width, height, l, t, scroll,
+    data
+  } = this;
+  const {
+    left,
+    width,
+    height,
+    l,
+    t,
+    scroll,
   } = offset;
   const ftwidth = data.freezeTotalWidth();
   let left0 = left - ftwidth;
   if (ftwidth > l) left0 -= scroll.x;
   return {
-    left: left0, top: t, width, height,
+    left: left0,
+    top: t,
+    width,
+    height,
   };
 }
 
 function calLAreaOffset(offset) {
-  const { data } = this;
   const {
-    top, width, height, l, t, scroll,
+    data
+  } = this;
+  const {
+    top,
+    width,
+    height,
+    l,
+    t,
+    scroll,
   } = offset;
   const ftheight = data.freezeTotalHeight();
   let top0 = top - ftheight;
   // console.log('ftheight:', ftheight, ', t:', t);
   if (ftheight > t) top0 -= scroll.y;
   return {
-    left: l, top: top0, width, height,
+    left: l,
+    top: top0,
+    width,
+    height,
   };
 }
 
 function setBRAreaOffset(offset) {
-  const { br } = this;
+  const {
+    br
+  } = this;
   br.setAreaOffset(calBRAreaOffset.call(this, offset));
 }
 
 function setTLAreaOffset(offset) {
-  const { tl } = this;
+  const {
+    tl
+  } = this;
   tl.setAreaOffset(offset);
 }
 
 function setTAreaOffset(offset) {
-  const { t } = this;
+  const {
+    t
+  } = this;
   t.setAreaOffset(calTAreaOffset.call(this, offset));
 }
 
 function setLAreaOffset(offset) {
-  const { l } = this;
+  const {
+    l
+  } = this;
   l.setAreaOffset(calLAreaOffset.call(this, offset));
 }
 
 function setLClipboardOffset(offset) {
-  const { l } = this;
+  const {
+    l
+  } = this;
   l.setClipboardOffset(calLAreaOffset.call(this, offset));
 }
 
 function setBRClipboardOffset(offset) {
-  const { br } = this;
+  const {
+    br
+  } = this;
   br.setClipboardOffset(calBRAreaOffset.call(this, offset));
 }
 
 function setTLClipboardOffset(offset) {
-  const { tl } = this;
+  const {
+    tl
+  } = this;
   tl.setClipboardOffset(offset);
 }
 
 function setTClipboardOffset(offset) {
-  const { t } = this;
+  const {
+    t
+  } = this;
   t.setClipboardOffset(calTAreaOffset.call(this, offset));
 }
 
@@ -237,20 +298,39 @@ export default class Selector {
 
   resetOffset() {
     const {
-      data, tl, t, l, br,
+      data,
+      tl,
+      t,
+      l,
+      br,
     } = this;
     const freezeHeight = data.freezeTotalHeight();
     const freezeWidth = data.freezeTotalWidth();
     if (freezeHeight > 0 || freezeWidth > 0) {
-      tl.setOffset({ width: freezeWidth, height: freezeHeight });
-      t.setOffset({ left: freezeWidth, height: freezeHeight });
-      l.setOffset({ top: freezeHeight, width: freezeWidth });
-      br.setOffset({ left: freezeWidth, top: freezeHeight });
+      tl.setOffset({
+        width: freezeWidth,
+        height: freezeHeight
+      });
+      t.setOffset({
+        left: freezeWidth,
+        height: freezeHeight
+      });
+      l.setOffset({
+        top: freezeHeight,
+        width: freezeWidth
+      });
+      br.setOffset({
+        left: freezeWidth,
+        top: freezeHeight
+      });
     } else {
       tl.hide();
       t.hide();
       l.hide();
-      br.setOffset({ left: 0, top: 0 });
+      br.setOffset({
+        left: 0,
+        top: 0
+      });
     }
   }
 
@@ -284,9 +364,14 @@ export default class Selector {
   }
 
   set(ri, ci, indexesUpdated = true) {
-    const { data } = this;
+    const {
+      data
+    } = this;
     const cellRange = data.calSelectedRangeByStart(ri, ci);
-    const { sri, sci } = cellRange;
+    const {
+      sri,
+      sci
+    } = cellRange;
     if (indexesUpdated) {
       let [cri, cci] = [ri, ci];
       if (ri < 0) cri = 0;
@@ -304,7 +389,11 @@ export default class Selector {
   }
 
   setEnd(ri, ci, moving = true) {
-    const { data, lastri, lastci } = this;
+    const {
+      data,
+      lastri,
+      lastci
+    } = this;
     if (moving) {
       if (ri === lastri && ci === lastci) return;
       this.lastri = ri;
@@ -316,7 +405,10 @@ export default class Selector {
 
   reset() {
     // console.log('::::', this.data);
-    const { eri, eci } = this.data.selector.range;
+    const {
+      eri,
+      eci
+    } = this.data.selector.range;
     this.setEnd(eri, eci);
   }
 
@@ -326,7 +418,10 @@ export default class Selector {
     // const [sri, sci] = this.sIndexes;
     // const [eri, eci] = this.eIndexes;
     const {
-      sri, sci, eri, eci,
+      sri,
+      sci,
+      eri,
+      eci,
     } = this.range;
     const [nri, nci] = [ri, ci];
     // const rn = eri - sri;
@@ -376,7 +471,10 @@ export default class Selector {
       offset.width += 2;
       offset.height += 2;
       const {
-        br, l, t, tl,
+        br,
+        l,
+        t,
+        tl,
       } = this;
       br.showAutofill(calBRAreaOffset.call(this, offset));
       l.showAutofill(calLAreaOffset.call(this, offset));

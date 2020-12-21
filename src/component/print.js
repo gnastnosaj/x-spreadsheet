@@ -57,7 +57,7 @@ function pagerSizeChange(evt) {
   const ps = PAGER_SIZES[value];
   paper.w = inches2px(ps[1]);
   paper.h = inches2px(ps[2]);
-  // console.log('paper:', ps, paper);
+  this.sheet.table.resetData(this.data);
   this.preview();
 }
 
@@ -70,6 +70,7 @@ function pagerOrientationChange(evt) {
   } = evt.target;
   const v = PAGER_ORIENTATIONS[value];
   paper.orientation = v;
+  this.sheet.table.resetData(this.data);
   this.preview();
 }
 
@@ -86,7 +87,7 @@ function pageAlignChange(evt) {
 }
 
 export default class Print {
-  constructor(data) {
+  constructor(sheet) {
     this.paper = {
       w: inches2px(PAGER_SIZES[1][1]),
       h: inches2px(PAGER_SIZES[1][2]),
@@ -100,7 +101,8 @@ export default class Print {
         return this.orientation === 'landscape' ? this.w : this.h;
       },
     };
-    this.data = data;
+    this.sheet = sheet;
+    this.data = sheet.data;
     this.el = h('div', `${cssPrefix}-print`)
       .children(
         h('div', `${cssPrefix}-print-bar`)

@@ -1079,7 +1079,7 @@ export default class Sheet {
     } = data.settings;
     this.el = h('div', `${cssPrefix}-sheet`);
     this.toolbar = new Toolbar(data, view.width, !showToolbar);
-    this.print = new Print(data);
+    this.print = new Print(this);
     targetEl.children(this.toolbar.el, this.el, this.print.el);
     this.data = data;
     // table
@@ -1133,7 +1133,7 @@ export default class Sheet {
       this.sortFilter.el,
     );
     // table
-    this.table = new Table(this.tableEl.el, data, this.print.paper);
+    this.table = new Table(this.tableEl.el, this);
     sheetInitEvents.call(this);
     sheetReset.call(this);
     // init selector [0, 0]

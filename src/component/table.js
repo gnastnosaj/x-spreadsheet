@@ -481,11 +481,11 @@ function renderPageSizeHighlightLine(fw, fh, ftw, fth) {
 
 /** end */
 class Table {
-  constructor(el, data, paper) {
+  constructor(el, sheet) {
     this.el = el;
-    this.draw = new Draw(el, data.viewWidth(), data.viewHeight());
-    this.data = data;
-    this.paper = paper;
+    this.data = sheet.data;
+    this.draw = new Draw(el, this.data.viewWidth(), this.data.viewHeight());
+    this.paper = sheet.print.paper;
   }
 
   resetData(data) {

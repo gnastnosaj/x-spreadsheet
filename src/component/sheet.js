@@ -746,8 +746,13 @@ function toolbarChange(type, value) {
     }
   } else {
     data.setSelectedCellAttr(type, value);
-    if (type === 'formula' && !data.selector.multiple()) {
-      editorSet.call(this);
+    if (type === 'formula') {
+      if (!data.selector.multiple()) {
+        const cell = data.getSelectedCell();
+        if (cell && (cell.element == null || cell.element === 'text')) {
+          editorSet.call(this);
+        }
+      }
     }
     sheetReset.call(this);
   }

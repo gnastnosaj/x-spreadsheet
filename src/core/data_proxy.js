@@ -651,14 +651,14 @@ export default class DataProxy {
         ci,
         range
       } = selector;
+      const [rn, cn] = selector.size();
+      const {
+        sri,
+        sci,
+        eri,
+        eci,
+      } = range;
       if (selector.multiple()) {
-        const [rn, cn] = selector.size();
-        const {
-          sri,
-          sci,
-          eri,
-          eci,
-        } = range;
         if (rn > 1) {
           for (let i = sci; i <= eci; i += 1) {
             const cell = rows.getCellOrNew(eri + 1, i);
@@ -669,8 +669,16 @@ export default class DataProxy {
           cell.text = `=${value}(${xy2expr(sci, ri)}:${xy2expr(eci, ri)})`;
         }
       } else {
-        const cell = rows.getCellOrNew(ri, ci);
-        cell.text = `=${value}()`;
+        let cell = rows.getCellOrNew(eri, eci);
+        if (cell.element == null || cell.element === 'text') {
+          cell.text = `=${value}()`;
+        } else if (cell.extendOrientation === 'vertical') {
+          cell = rows.getCellOrNew(eri + 1, eci);
+          cell.text = `=${value}(${xy2expr(sci, sri)})`;
+        } else if (cell.extendOrientation === 'horizontal') {
+          cell = rows.getCellOrNew(eri, eci + 1);
+          cell.text = `=${value}(${xy2expr(sci, sri)})`;
+        }
       }
     } else {
       if (this.isSignleSelected()) {

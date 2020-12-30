@@ -87,7 +87,7 @@ class Spreadsheet {
   }
 
   cellText(ri, ci, text, sheetIndex = 0) {
-    this.datas[sheetIndex].setCellText(ri, ci, text, 'finished');
+    this.datas[sheetIndex].setCellText(ri, ci, text, 'outside');
     return this;
   }
 

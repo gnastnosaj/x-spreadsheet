@@ -1210,10 +1210,18 @@ export default class DataProxy {
       validations
     } = this;
     if (state === 'finished') {
-      rows.setCellText(ri, ci, '');
-      history.add(this.getData());
-      rows.setCellText(ri, ci, text);
+      const cell = rows.getCellOrNew(ri, ci);
+      delete cell._state;
+    } else if (state === 'outside') {
+      this.changeData(() => {
+        rows.setCellText(ri, ci, text);
+      });
     } else {
+      const cell = rows.getCellOrNew(ri, ci);
+      if (cell._state !== 'input') {
+        history.add(this.getData());
+        cell._state = 'input';
+      }
       rows.setCellText(ri, ci, text);
       this.change(this.getData());
     }

@@ -91,7 +91,7 @@ export default class Print {
     this.paper = {
       w: inches2px(PAGER_SIZES[1][1]),
       h: inches2px(PAGER_SIZES[1][2]),
-      padding: 50,
+      padding: 0,
       orientation: PAGER_ORIENTATIONS[1],
       align: PAGER_ALIGNS[0],
       get width() {
@@ -142,7 +142,7 @@ export default class Print {
                   }),
                 ).on('change', pagerOrientationChange.bind(this)),
               ),
-              h('fieldset', '').children(
+              this.alignEl = h('fieldset', '').children(
                 h('label', '').child(`${t('print.align')}`),
                 h('select', '').children(
                   ...PAGER_ALIGNS.map((it, index) => {
@@ -179,16 +179,18 @@ export default class Print {
     const iheight = (height - padding * 2) / dpr;
     let left = padding / dpr;
     const top = padding / dpr;
+
     if (scale > 1) {
       scale = 1;
-    }
-    if (scale < 0.7) {
-      scale = 0.7;
-    }
-    if (paper.align === 'center') {
-      left += (iwidth - cr.w * scale) / 2;
-    } else if (paper.align === 'right') {
-      left = (width - padding) / dpr - cr.w * scale;
+      this.alignEl.show();
+      if (paper.align === 'center') {
+        left += (iwidth - cr.w * scale) / 2;
+      } else if (paper.align === 'right') {
+        left = (width - padding) / dpr - cr.w * scale;
+      }
+    } else {
+      scale = 1;
+      this.alignEl.hide();
     }
 
     const pages = parseInt(cr.h * scale / iheight, 10) + 1;
@@ -202,7 +204,11 @@ export default class Print {
       eri: 0,
       eci: 0,
     };
-    for (let i = 0; i < pages; i += 1) {
+    const renderPage = (left, consumed) => {
+      const cache = {
+        ri,
+        yoffset
+      };
       let th = data.freezeTotalHeight() * scale;
       let yo = 0;
       const wrap = h('div', `${cssPrefix}-canvas-card`).css('height', `${height}px`).css('width', `${width}px`);
@@ -283,6 +289,17 @@ export default class Print {
       //mViewRange.sci = mViewRange.eci;
       yoffset += yo;
       this.contentEl.child(h('div', `${cssPrefix}-canvas-card-wraper`).child(wrap.child(canvas)));
+      if (consumed == null) {
+        consumed = iwidth;
+      }
+      if (consumed < cr.w) {
+        ri = cache.ri;
+        yoffset = cache.yoffset;
+        renderPage(left - iwidth, consumed + iwidth);
+      }
+    };
+    for (let i = 0; i < pages; i += 1) {
+      renderPage(left);
     }
     this.el.show();
   }
@@ -292,24 +309,36 @@ export default class Print {
     const {
       paper
     } = this;
+    if (this.iframes == null) {
+      this.iframes = [];
+    } else {
+      while (this.iframes.length > 0) {
+        window.document.body.removeChild(this.iframes.shift());
+      }
+    }
     const iframe = h('iframe', '').hide();
     const {
       el
     } = iframe;
     window.document.body.appendChild(el);
+    this.iframes.push(el);
     const {
       contentWindow
     } = el;
     const idoc = contentWindow.document;
-    const style = document.createElement('style');
+    const style = idoc.createElement('style');
     style.innerHTML = `
-      @page { size: ${paper.width}px ${paper.height}px; };
+      @page { size: ${paper.width - 2}px ${paper.height - 2}px; };
       canvas {
         page-break-before: auto;        
         page-break-after: always;
       };
     `;
     idoc.head.appendChild(style);
+    idoc.body.style.marginTop = '0px';
+    idoc.body.style.marginRight = '0px';
+    idoc.body.style.marginBottom = '0px';
+    idoc.body.style.marginLeft = '0px';
     this.canvases.forEach((it) => {
       const cn = it.cloneNode();
       cn.getContext('2d').drawImage(it, 0, 0);

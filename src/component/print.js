@@ -204,7 +204,13 @@ export default class Print {
       eri: 0,
       eci: 0,
     };
-    const renderPage = (left, consumed) => {
+    const renderPage = (left, consumed, total) => {
+      let sumWidth = true;
+      if (total == null) {
+        total = 0;
+      } else {
+        sumWidth = false;
+      }
       const cache = {
         ri,
         yoffset
@@ -227,7 +233,14 @@ export default class Print {
         const row = data.rows.get(`${ri}`);
         if (row != null) {
           const cells = row.cells;
-          for (const ci of Object.keys(cells)) {
+          const cols = Object.keys(cells);
+          if (sumWidth) {
+            const w = data.cols.sumWidth(0, cols[cols.length - 1]);
+            if (w > total) {
+              total = w;
+            }
+          }
+          for (const ci of cols) {
             const cell = cells[ci];
             if (cell.merge && cell.merge[0] > merge) {
               merge = cell.merge[0];
@@ -292,10 +305,10 @@ export default class Print {
       if (consumed == null) {
         consumed = iwidth;
       }
-      if (consumed < cr.w) {
+      if (consumed < total) {
         ri = cache.ri;
         yoffset = cache.yoffset;
-        renderPage(left - iwidth, consumed + iwidth);
+        renderPage(left - iwidth, consumed + iwidth, total);
       }
     };
     for (let i = 0; i < pages; i += 1) {

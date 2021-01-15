@@ -103,6 +103,9 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
       cellText = cell.field ? cell.field : '';
     } else if (cell.element === 'expression') {
       cellText = cell.expression ? cell.expression : '';
+    } else if (style.format) {
+      // console.log(data.formatm, '>>', cell.format);
+      cellText = formatm[style.format].render(cellText);
     }
     if (cell.patternExt === 'tree') {
       if (cell.expanded === true) {
@@ -110,10 +113,6 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
       } else {
         cellText = `+  ${cellText}`;
       }
-    }
-    if (style.format) {
-      // console.log(data.formatm, '>>', cell.format);
-      cellText = formatm[style.format].render(cellText);
     }
     const font = Object.assign({}, style.font);
     font.size = getFontSizePxByPt(font.size);

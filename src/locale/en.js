@@ -64,7 +64,7 @@ export default {
     time: 'Time',
     datetime: 'Date time',
     durationOptional: 'Duration',
-    duration: 'Duration(NotNull)',
+    duration: 'Duration (NotNull)',
   },
   formula: {
     sum: 'Sum',

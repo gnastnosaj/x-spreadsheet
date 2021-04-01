@@ -82,6 +82,13 @@ const baseFormats = [
     render: formatStringRender,
   },
   {
+    key: 'durationOptional',
+    title: tf('format.durationOptional'),
+    type: 'date',
+    label: '24:01:00',
+    render: formatStringRender,
+  },
+  {
     key: 'duration',
     title: tf('format.duration'),
     type: 'date',

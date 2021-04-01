@@ -63,7 +63,8 @@ export default {
     date: '短日期',
     time: '时间',
     datetime: '长日期',
-    duration: '持续时间',
+    durationOptional: '持续时间',
+    duration: '持续时间(非空)',
   },
   formula: {
     sum: '求和',
